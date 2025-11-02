@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pipes - PlumbPro</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* ===== Global Styles ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background-color: #f8f9fa;
+      color: #333;
+      line-height: 1.6;
+    }
+    
+    /* ===== Header & Nav Styles ===== */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background: #0077b6;
+      color: #fff;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .logo h1 { 
+      margin: 0; 
+      font-size: 1.8rem; 
+      display: flex;
+      align-items: center;
+    }
+    
+    .logo h1 i {
+      margin-right: 10px;
+      color: #ffcc00;
+    }
+    
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+    }
+    
+    nav ul li { 
+      position: relative; 
+      margin: 0 5px;
+    }
+    
+    nav ul li a {
+      color: #fff;
+      text-decoration: none;
+      padding: 8px 15px;
+      display: block;
+      font-weight: 500;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+    
+    nav ul li a:hover { 
+      background: rgba(255,255,255,0.2); 
+    }
+    
+    /* Mobile menu button */
+    .menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    /* Dropdown */
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      background: #fff;
+      min-width: 180px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      border-radius: 6px;
+      top: 100%;
+      left: 0;
+      z-index: 100;
+      overflow: hidden;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    .dropdown-menu li a {
+      color: #333;
+      padding: 12px 15px;
+      transition: all 0.2s ease;
+    }
+    
+    .dropdown-menu li a:hover {
+      background: #f0f0f0;
+      padding-left: 20px;
+    }
+    
+    .dropdown:hover .dropdown-menu,
+    .profile:hover .dropdown-menu {
+      display: block;
+    }
+
+    /* Profile */
+    .profile-icon {
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      vertical-align: middle;
+      margin-right: 5px;
+      object-fit: cover;
+    }
+
+    /* ===== Products Page Styles ===== */
+    .products-page {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+    
+    .page-title {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #0077b6;
+      position: relative;
+      padding-bottom: 15px;
+    }
+    
+    .page-title:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: #ff6600;
+      border-radius: 2px;
+    }
+    
+    /* Filters Section */
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 30px;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      align-items: center;
+    }
+    
+    .search-box {
+      position: relative;
+      flex: 1;
+      min-width: 250px;
+    }
+    
+    .search-box input {
+      width: 100%;
+      padding: 12px 15px 12px 40px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+    
+    .search-box i {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #777;
+    }
+    
+    .filter-select {
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
+      background: white;
+      min-width: 150px;
+    }
+    
+    .price-filter {
+      display: flex;
+      flex-direction: column;
+      min-width: 200px;
+    }
+    
+    .price-filter label {
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+    
+    .price-range {
+      appearance: none;
+      width: 100%;
+      height: 5px;
+      background: #ddd;
+      border-radius: 5px;
+      outline: none;
+    }
+    
+    .price-range::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #0077b6;
+      cursor: pointer;
+    }
+    
+    .price-value {
+      text-align: center;
+      font-weight: 600;
+      color: #0077b6;
+      margin-top: 5px;
+    }
+    
+    .filter-buttons {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .filter-btn {
+      padding: 12px 20px;
+      background: #0077b6;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+    
+    .filter-btn:hover {
+      background: #0090d9;
+    }
+    
+    .reset-btn {
+      padding: 12px 20px;
+      background: #f8f9fa;
+      color: #333;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+    
+    .reset-btn:hover {
+      background: #e9ecef;
+    }
+    
+    /* Product Grid */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 25px;
+      margin-bottom: 40px;
+    }
+    
+    .product-card {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    }
+    
+    .product-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      padding: 5px 10px;
+      background: #ff6600;
+      color: white;
+      border-radius: 3px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      z-index: 2;
+    }
+    
+    .product-img {
+      height: 200px;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .product-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    
+    .product-card:hover .product-img img {
+      transform: scale(1.05);
+    }
+    
+    .quick-view {
+      position: absolute;
+      bottom: -40px;
+      left: 0;
+      right: 0;
+      background: rgba(0,119,182,0.8);
+      color: white;
+      text-align: center;
+      padding: 10px;
+      transition: all 0.3s ease;
+    }
+    
+    .product-card:hover .quick-view {
+      bottom: 0;
+    }
+    
+    .product-info {
+      padding: 20px;
+    }
+    
+    .product-info h3 {
+      margin-bottom: 10px;
+      color: #0077b6;
+      font-size: 1.2rem;
+    }
+    
+    .product-info p {
+      color: #666;
+      margin-bottom: 15px;
+      font-size: 0.95rem;
+    }
+    
+    .product-price {
+      font-weight: bold;
+      color: #ff6600;
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+      display: block;
+    }
+    
+    .original-price {
+      text-decoration: line-through;
+      color: #999;
+      font-size: 0.9rem;
+      margin-right: 10px;
+    }
+    
+    .add-to-cart {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background: #0077b6;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    
+    .add-to-cart:hover {
+      background: #0090d9;
+    }
+    
+    .add-to-cart.added {
+      background: #28a745;
+    }
+    
+    /* Pagination */
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 30px;
+    }
+    
+    .pagination button {
+      padding: 10px 15px;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .pagination button:hover {
+      background: #0077b6;
+      color: white;
+      border-color: #0077b6;
+    }
+    
+    .pagination button.active {
+      background: #0077b6;
+      color: white;
+      border-color: #0077b6;
+    }
+    
+    /* ===== Footer ===== */
+    footer {
+      background: #004b70;
+      color: #fff;
+      padding: 50px 0 20px;
+      margin-top: 60px;
+    }
+    
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    .footer-column h3 {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+      position: relative;
+      padding-bottom: 10px;
+    }
+    
+    .footer-column h3:after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 40px;
+      height: 3px;
+      background: #ff6600;
+    }
+    
+    .footer-column p, .footer-column li {
+      margin-bottom: 10px;
+      opacity: 0.9;
+    }
+    
+    .footer-column ul {
+      list-style: none;
+    }
+    
+    .footer-column ul li {
+      margin-bottom: 8px;
+    }
+    
+    .footer-column a {
+      color: #fff;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    
+    .footer-column a:hover {
+      color: #ffcc00;
+      padding-left: 5px;
+    }
+    
+    .social-links {
+      display: flex;
+      gap: 15px;
+      margin-top: 15px;
+    }
+    
+    .social-links a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+      transition: all 0.3s ease;
+    }
+    
+    .social-links a:hover {
+      background: #ff6600;
+      transform: translateY(-3px);
+    }
+    
+    .copyright {
+      text-align: center;
+      padding-top: 30px;
+      margin-top: 30px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      opacity: 0.8;
+      font-size: 0.9rem;
+    }
+
+    /* ===== Animations ===== */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* ===== Responsive Styles ===== */
+    @media (max-width: 768px) {
+      header {
+        flex-wrap: wrap;
+      }
+      
+      .menu-btn {
+        display: block;
+      }
+      
+      nav {
+        width: 100%;
+        margin-top: 15px;
+        display: none;
+      }
+      
+      nav.active {
+        display: block;
+      }
+      
+      nav ul {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      nav ul li {
+        width: 100%;
+        margin: 5px 0;
+      }
+      
+      .dropdown-menu {
+        position: static;
+        width: 100%;
+        box-shadow: none;
+        margin-top: 5px;
+        display: none;
+        animation: none;
+      }
+      
+      .dropdown:hover .dropdown-menu,
+      .profile:hover .dropdown-menu {
+        display: none;
+      }
+      
+      .dropdown.active .dropdown-menu,
+      .profile.active .dropdown-menu {
+        display: block;
+      }
+      
+      .filters {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .search-box, .filter-select, .price-filter {
+        width: 100%;
+        margin-bottom: 15px;
+      }
+      
+      .filter-buttons {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- ===== Header with Categories + Profile + Cart ===== -->
+  <header>
+    <div class="logo">
+      <h1><i class="fas fa-faucet"></i> PlumbPro</h1>
+    </div>
+    
+    <button class="menu-btn" id="menu-toggle">
+      <i class="fas fa-bars"></i>
+    </button>
+    
+    <nav id="main-nav">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+
+        <!-- Categories Dropdown -->
+        <li class="dropdown">
+          <a href="#"><i class="fas fa-box-open"></i>Products ▾</a>
+          <ul class="dropdown-menu">
+            <li><a href="pipes.html" class="active"><i class="fas fa-pipe"></i> Pipes</a></li>
+            <li><a href="fittings.html"><i class="fas fa-link"></i> Fittings</a></li>
+            <li><a href="taps.html"><i class="fas fa-faucet"></i> Taps & Faucets</a></li>
+            <li><a href="bathroom.html"><i class="fas fa-bath"></i> Bathroom Accessories</a></li>
+          </ul>
+        </li>
+
+        
+       <li>
+  <a href="cart.html" class="active">
+    <i class="fas fa-shopping-cart"></i> Cart 
+    <span id="cart-count">(0)</span> 
+    <span id="cart-amount">₹0</span>
+  </a>
+</li>
+
+        <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+
+        <!-- Profile Section -->
+        <li class="profile">
+          <a href="#">
+            <img src="images/Ani.jpg" alt="Profile" class="profile-icon">
+            Profile
+          </a>
+          <ul class="dropdown-menu">
+            <li><a href="login.html"><i class="fas fa-sign-in-alt"></i> Login / Sign Up</a></li>
+            <li><a href="profile.html"><i class="fas fa-user-circle"></i> My Account</a></li>
+            <li><a href="orders.html"><i class="fas fa-clipboard-list"></i> My Orders</a></li>
+            <li><a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ===== Products Page Content ===== -->
+  <div class="products-page">
+    <h1 class="page-title">Pipes</h1>
+    
+      <div class="price-filter">
+        <label for="price-range">Max Price: ₹<span id="price-value">500</span></label>
+        <input type="range" id="price-range" class="price-range" min="50" max="500" value="500" step="50">
+      </div>
+      
+      <div class="filter-buttons">
+        <button class="filter-btn" id="apply-filters">Apply Filters</button>
+        <button class="reset-btn" id="reset-filters">Reset</button>
+      </div>
+    </div>
+    
+    <div class="products-grid" id="product-list">
+      <!-- Products will be dynamically inserted here -->
+    </div>
+    
+    <div class="pagination">
+      <button id="prev-page">&laquo; Previous</button>
+      <button class="active">1</button>
+      <button>2</button>
+      <button>3</button>
+      <button id="next-page">Next &raquo;</button>
+    </div>
+  </div>
+
+  <!-- ===== Footer ===== -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-column">
+        <h3>PlumbPro</h3>
+        <p>Your trusted partner for all plumbing needs. We provide high-quality materials and expert advice to ensure your projects succeed.</p>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-pinterest"></i></a>
+        </div>
+      </div>
+      
+      <div class="footer-column">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="products.html">Products</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li><a href="blog.html">Blog</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-column">
+        <h3>Customer Service</h3>
+        <ul>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="shipping.html">Shipping & Returns</a></li>
+          <li><a href="warranty.html">Warranty</a></li>
+          <li><a href="terms.html">Terms & Conditions</a></li>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-column">
+        <h3>Contact Info</h3>
+        <p><i class="fas fa-map-marker-alt"></i> 123 Plumbing Street, City, Country</p>
+        <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+        <p><i class="fas fa-envelope"></i> info@plumbpro.com</p>
+        <p><i class="fas fa-clock"></i> Mon-Fri: 8AM - 6PM</p>
+      </div>
+    </div>
+    
+    <div class="copyright">
+      <p>© 2025 PlumbPro | All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // ===== Mobile Menu Toggle =====
+    const menuToggle = document.getElementById('menu-toggle');
+    const mainNav = document.getElementById('main-nav');
+    
+    menuToggle.addEventListener('click', () => {
+      mainNav.classList.toggle('active');
+    });
+    
+    // ===== Dropdown Menu for Mobile =====
+    const dropdowns = document.querySelectorAll('.dropdown, .profile');
+    
+    dropdowns.forEach(dropdown => {
+      const link = dropdown.querySelector('a');
+      
+      link.addEventListener('click', (e) => {
+        if (window.innerWidth <= 768) {
+          e.preventDefault();
+          dropdown.classList.toggle('active');
+        }
+      });
+    });
+
+    // ===== Product Data =====
+    const products = [
+      { id: 1, name: "PVC Pipe", price: 200, category: "Pipes",  image: "./images/pipe1.jpeg", description: "High-quality PVC pipe for plumbing applications", badge: "Best Seller" },
+      { id: 2, name: "CPVC Pipe", price: 350, category: "Pipes",  image: "./images/pipe2.jpeg", description: "Corrosion-resistant CPVC pipe for hot and cold water", badge: "New" },
+      { id: 3, name: "HDPE Pipe", price: 500, category: "Pipes",  image: "./images/pipe3.jpeg", description: "Durable HDPE pipe for high-pressure applications", badge: "Premium" },
+      { id: 4, name: "PVC Pipe (Industrial)", price: 250, category: "Pipes",  image: "./images/pipe4.jpeg", description: "Industrial-grade PVC pipe for heavy-duty applications", badge: "Durable" },
+      { id: 5, name: "CPVC Pipe (Flexible)", price: 400, category: "Pipes",  image: "./images/pipe5.jpeg", description: "Flexible CPVC pipe for complex installations", badge: "Flexible" },
+      { id: 6, name: "HDPE Pipe (Corrugated)", price: 550, category: "Pipes", image: "./images/pipe6.jpeg", description: "Corrugated HDPE pipe for drainage systems", badge: "Drainage" },
+      { id: 7, name: "PVC Pipe (UV Resistant)", price: 280, category: "Pipes",  image: "./images/pipe7.jpeg", description: "UV-resistant PVC pipe for outdoor applications", badge: "Outdoor" },
+      { id: 8, name: "CPVC Pipe (Fire Retardant)", price: 450, category: "Pipes",  image: "./images/pipe8.jpeg", description: "Fire-retardant CPVC pipe for safety applications", badge: "Safety" },
+      { id: 9, name: "HDPE Pipe (Potable Water)", price: 520, category: "Pipes",  image: "./images/pipe9.jpeg", description: "HDPE pipe certified for potable water systems", badge: "Drinking Water" },
+      { id: 10, name: "PVC Pipe (Electrical)", price: 220, category: "Pipes",  image: "./images/pipe10.jpeg", description: "PVC electrical conduit pipe for wiring protection", badge: "Electrical" },
+      { id: 11, name: "CPVC Pipe (Chemical Resistant)", price: 480, category: "Pipes", image: "./images/pipe11.jpeg", description: "Chemical-resistant CPVC pipe for industrial use", badge: "Chemical" },
+      { id: 12, name: "HDPE Pipe (Gas)", price: 600, category: "Pipes",  image: "./images/pipe12.jpeg", description: "HDPE pipe certified for gas distribution", badge: "Gas" },
+      { id: 13, name: "Plastic Pipe", price: 100, category: "Pipes",  image: "./images/pipe13.jpeg", description: "High-quality Plastic PVC", badge: "New" },
+      { id: 14, name: "Blue Water Pipe", price: 250, category: "Pipes",  image: "./images/pipe14.jpeg", description: "pipe certified for potable water systems", badge: "Water" },
+      { id: 15, name: "Sustainable Pipe", price: 300, category: "Pipes",  image: "./images/pipe15.jpeg", description: "Sustainble pipe certified for water systems", badge: "New" }
+      ];
+
+    // ===== Cart Functionality =====
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const cartCount = document.getElementById('cart-count');
+    
+    function updateCartCount() {
+      cartCount.textContent = `(${cart.length})`;
+    }
+    
+    // Initialize cart count
+    updateCartCount();
+
+    // ===== Display Products =====
+    const productList = document.getElementById('product-list');
+    
+    function displayProducts(productsToDisplay) {
+      productList.innerHTML = '';
+      
+      if (productsToDisplay.length === 0) {
+        productList.innerHTML = '<p class="no-products">No products match your filters. Try adjusting your search criteria.</p>';
+        return;
+      }
+      
+      productsToDisplay.forEach(product => {
+        const isInCart = cart.some(item => item.id === product.id);
+        
+        const productCard = document.createElement('div');
+        productCard.className = 'product-card';
+        productCard.innerHTML = `
+          ${product.badge ? `<span class="product-badge">${product.badge}</span>` : ''}
+          <div class="product-img">
+            <img src="${product.image}" alt="${product.name}">
+            <div class="quick-view">Quick View</div>
+          </div>
+          <div class="product-info">
+            <h3>${product.name}</h3>
+            <p>${product.description}</p>
+            <span class="product-price">₹${product.price.toFixed(2)}</span>
+            <button class="add-to-cart ${isInCart ? 'added' : ''}" data-id="${product.id}">
+              ${isInCart ? 'Added to Cart' : 'Add to Cart'}
+            </button>
+          </div>
+        `;
+        
+        productList.appendChild(productCard);
+      });
+      
+      // Add event listeners to the Add to Cart buttons
+      document.querySelectorAll('.add-to-cart').forEach(button => {
+        button.addEventListener('click', function() {
+          const productId = parseInt(this.getAttribute('data-id'));
+          const product = products.find(p => p.id === productId);
+          
+          if (!cart.some(item => item.id === productId)) {
+            cart.push(product);
+            this.classList.add('added');
+            this.textContent = 'Added to Cart';
+            
+            // Save to localStorage
+            localStorage.setItem('cart', JSON.stringify(cart));
+            
+            // Update cart count
+            updateCartCount();
+            
+            // Show confirmation
+            this.style.backgroundColor = '#28a745';
+          } else {
+            // Remove from cart
+            cart = cart.filter(item => item.id !== productId);
+            this.classList.remove('added');
+            this.textContent = 'Add to Cart';
+            
+            // Save to localStorage
+            localStorage.setItem('cart', JSON.stringify(cart));
+            
+            // Update cart count
+            updateCartCount();
+          }
+        });
+      });
+    }
+    
+    // Initial display of all products
+    displayProducts(products);
+
+    // ===== Filter Functionality =====
+    const searchInput = document.getElementById('search');
+    const typeSelect = document.getElementById('type');
+    const priceRange = document.getElementById('price-range');
+    const priceValue = document.getElementById('price-value');
+    const applyFiltersBtn = document.getElementById('apply-filters');
+    const resetFiltersBtn = document.getElementById('reset-filters');
+    
+    // Update price value display
+    priceRange.addEventListener('input', () => {
+      priceValue.textContent = priceRange.value;
+    });
+    
+    // Apply filters
+    applyFiltersBtn.addEventListener('click', () => {
+      const searchText = searchInput.value.toLowerCase();
+      const type = typeSelect.value;
+      const maxPrice = parseFloat(priceRange.value);
+      
+      const filteredProducts = products.filter(product => {
+        const matchesSearch = product.name.toLowerCase().includes(searchText) || 
+                             product.description.toLowerCase().includes(searchText);
+        const matchesType = type === 'All' || product.type === type;
+        const matchesPrice = product.price <= maxPrice;
+        
+        return matchesSearch && matchesType && matchesPrice;
+      });
+      
+      displayProducts(filteredProducts);
+    });
+    
+    // Reset filters
+    resetFiltersBtn.addEventListener('click', () => {
+      searchInput.value = '';
+      typeSelect.value = 'All';
+      priceRange.value = 500;
+      priceValue.textContent = '500';
+      
+      displayProducts(products);
+    });
+
+    // ===== Pagination =====
+    const prevPageBtn = document.getElementById('prev-page');
+    const nextPageBtn = document.getElementById('next-page');
+    const pageButtons = document.querySelectorAll('.pagination button:not(#prev-page):not(#next-page)');
+    
+    let currentPage = 1;
+    const productsPerPage = 6;
+    
+    function updatePagination() {
+      // Update active page button
+      pageButtons.forEach((button, index) => {
+        if (index + 1 === currentPage) {
+          button.classList.add('active');
+        } else {
+          button.classList.remove('active');
+        }
+      });
+      
+      // Calculate products to show
+      const startIndex = (currentPage - 1) * productsPerPage;
+      const endIndex = startIndex + productsPerPage;
+      const productsToShow = products.slice(startIndex, endIndex);
+      
+      displayProducts(productsToShow);
+    }
+    
+    // Page button event listeners
+    pageButtons.forEach((button, index) => {
+      button.addEventListener('click', () => {
+        currentPage = index + 1;
+        updatePagination();
+      });
+    });
+    
+    // Previous page button
+    prevPageBtn.addEventListener('click', () => {
+      if (currentPage > 1) {
+        currentPage--;
+        updatePagination();
+      }
+    });
+    
+    // Next page button
+    nextPageBtn.addEventListener('click', () => {
+      if (currentPage < pageButtons.length) {
+        currentPage++;
+        updatePagination();
+      }
+    });
+
+    // Initialize pagination
+    updatePagination();
+  </script>
+</body>
+</html>

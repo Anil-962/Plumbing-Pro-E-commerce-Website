@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up - PlumbPro</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background-color: #f8f9fa;
+      color: #333;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    
+    /* Header Styles */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background: #0077b6;
+      color: #fff;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .logo h1 { 
+      margin: 0; 
+      font-size: 1.8rem; 
+      display: flex;
+      align-items: center;
+    }
+    
+    .logo h1 i {
+      margin-right: 10px;
+      color: #ffcc00;
+    }
+    
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+    }
+    
+    nav ul li { 
+      position: relative; 
+      margin: 0 5px;
+    }
+    
+    nav ul li a {
+      color: #fff;
+      text-decoration: none;
+      padding: 8px 15px;
+      display: block;
+      font-weight: 500;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+    
+    nav ul li a:hover { 
+      background: rgba(255,255,255,0.2); 
+    }
+    
+    nav ul li a.active {
+      background: rgba(255,255,255,0.2);
+    }
+    
+    /* Centered signup container */
+    .auth-container {
+      max-width: 500px;
+      margin: 40px auto;
+      background-color: #fff;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      flex: 1;
+    }
+    
+    .auth-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .auth-header h2 {
+      color: #0077b6;
+      font-size: 2rem;
+      margin-bottom: 10px;
+      position: relative;
+      padding-bottom: 15px;
+    }
+    
+    .auth-header h2:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 4px;
+      background: #ff6600;
+      border-radius: 2px;
+    }
+    
+    .auth-header p {
+      color: #666;
+      margin-top: 10px;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #0077b6;
+    }
+    
+    .input-with-icon {
+      position: relative;
+    }
+    
+    .input-with-icon i {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #0077b6;
+    }
+    
+    .input-with-icon input {
+      width: 100%;
+      padding: 12px 15px 12px 45px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+    
+    .input-with-icon input:focus {
+      border-color: #0077b6;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(0,119,182,0.2);
+    }
+    
+    .password-strength {
+      margin-top: 8px;
+      height: 5px;
+      background: #eee;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    
+    .password-strength-bar {
+      height: 100%;
+      width: 0;
+      transition: width 0.3s ease;
+    }
+    
+    .password-strength-text {
+      font-size: 0.8rem;
+      margin-top: 5px;
+      color: #666;
+    }
+    
+    .terms {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+    
+    .terms input {
+      margin-right: 10px;
+      margin-top: 3px;
+    }
+    
+    .terms label {
+      font-size: 0.9rem;
+      color: #666;
+    }
+    
+    .terms a {
+      color: #0077b6;
+      text-decoration: none;
+    }
+    
+    .terms a:hover {
+      text-decoration: underline;
+    }
+    
+    .btn-signup {
+      width: 100%;
+      padding: 15px;
+      background: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-signup:hover {
+      background: #218838;
+    }
+    
+    .social-signup {
+      margin: 25px 0;
+      text-align: center;
+      position: relative;
+    }
+    
+    .social-signup:before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: #eee;
+      z-index: 1;
+    }
+    
+    .social-signup p {
+      display: inline-block;
+      background: #fff;
+      padding: 0 15px;
+      position: relative;
+      z-index: 2;
+      color: #666;
+    }
+    
+    .social-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 15px;
+    }
+    
+    .social-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: #f8f9fa;
+      border: 1px solid #ddd;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .social-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .social-btn.google {
+      color: #DB4437;
+    }
+    
+    .social-btn.facebook {
+      color: #4267B2;
+    }
+    
+    .switch-link {
+      text-align: center;
+      margin-top: 25px;
+      color: #666;
+    }
+    
+    .switch-link a {
+      color: #0077b6;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    
+    .switch-link a:hover {
+      text-decoration: underline;
+    }
+    
+    /* Footer */
+    footer {
+      background: #004b70;
+      color: #fff;
+      padding: 30px 0 15px;
+      margin-top: auto;
+    }
+    
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    .footer-column h3 {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+      position: relative;
+      padding-bottom: 10px;
+    }
+    
+    .footer-column h3:after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 40px;
+      height: 3px;
+      background: #ff6600;
+    }
+    
+    .footer-column p, .footer-column li {
+      margin-bottom: 10px;
+      opacity: 0.9;
+    }
+    
+    .footer-column ul {
+      list-style: none;
+    }
+    
+    .footer-column ul li {
+      margin-bottom: 8px;
+    }
+    
+    .footer-column a {
+      color: #fff;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    
+    .footer-column a:hover {
+      color: #ffcc00;
+      padding-left: 5px;
+    }
+    
+    .social-links {
+      display: flex;
+      gap: 15px;
+      margin-top: 15px;
+    }
+    
+    .social-links a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+      transition: all 0.3s ease;
+    }
+    
+    .social-links a:hover {
+      background: #ff6600;
+      transform: translateY(-3px);
+    }
+    
+    .copyright {
+      text-align: center;
+      padding-top: 20px;
+      margin-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      opacity: 0.8;
+      font-size: 0.9rem;
+    }
+    
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+      .auth-container {
+        margin: 20px;
+        padding: 30px 25px;
+      }
+      
+      header {
+        flex-direction: column;
+        text-align: center;
+        padding: 15px;
+      }
+      
+      nav {
+        margin-top: 15px;
+      }
+      
+      nav ul {
+        justify-content: center;
+      }
+    }
+
+    /* Success Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal-content {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    }
+    
+    .modal-icon {
+      font-size: 4rem;
+      color: #28a745;
+      margin-bottom: 20px;
+    }
+    
+    .modal-content h3 {
+      color: #0077b6;
+      margin-bottom: 15px;
+    }
+    
+    .modal-content p {
+      margin-bottom: 20px;
+      color: #666;
+    }
+    
+    .modal-btn {
+      padding: 10px 20px;
+      background: #0077b6;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    
+    .modal-btn:hover {
+      background: #005b8a;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header with Navigation -->
+  <header>
+    <div class="logo">
+      <h1><i class="fas fa-faucet"></i> PlumbPro</h1>
+    </div>
+    
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="cart.html">Cart</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="signup.html" class="active">Sign Up</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Sign Up Container -->
+  <div class="auth-container">
+    <div class="auth-header">
+      <h2>Create Account</h2>
+      <p>Join PlumbPro to access exclusive features and offers</p>
+    </div>
+    
+    <form id="signupForm">
+      <div class="form-group">
+        <label for="name">Full Name</label>
+        <div class="input-with-icon">
+          <i class="fas fa-user"></i>
+          <input type="text" id="name" placeholder="Enter your full name" required>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <div class="input-with-icon">
+          <i class="fas fa-envelope"></i>
+          <input type="email" id="email" placeholder="Enter your email" required>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="input-with-icon">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="password" placeholder="Create a password" required>
+        </div>
+        <div class="password-strength">
+          <div class="password-strength-bar" id="passwordStrengthBar"></div>
+        </div>
+        <div class="password-strength-text" id="passwordStrengthText">Password strength</div>
+      </div>
+      
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <div class="input-with-icon">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="confirmPassword" placeholder="Confirm your password" required>
+        </div>
+        <div id="passwordMatchText" class="password-strength-text"></div>
+      </div>
+      
+      <div class="terms">
+        <input type="checkbox" id="terms" required>
+        <label for="terms">I agree to the <a href="terms.html">Terms of Service</a> and <a href="privacy.html">Privacy Policy</a></label>
+      </div>
+      
+      <button type="submit" class="btn-signup">Create Account</button>
+    </form>
+    
+    <div class="social-signup">
+      <p>Or sign up with</p>
+      <div class="social-buttons">
+        <div class="social-btn google">
+          <i class="fab fa-google"></i>
+        </div>
+        <div class="social-btn facebook">
+          <i class="fab fa-facebook-f"></i>
+        </div>
+      </div>
+    </div>
+    
+    <div class="switch-link">
+      Already have an account? <a href="login.html">Login</a>
+    </div>
+  </div>
+
+  <!-- Success Modal -->
+  <div id="successModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-icon">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <h3>Account Created Successfully!</h3>
+      <p>Welcome to PlumbPro. Your account has been created successfully.</p>
+      <button class="modal-btn" id="modalLoginBtn">Continue to Login</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-column">
+        <h3>PlumbPro</h3>
+        <p>Your trusted partner for all plumbing needs. We provide high-quality materials and expert advice to ensure your projects succeed.</p>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-pinterest"></i></a>
+        </div>
+      </div>
+      
+      <div class="footer-column">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="products.html">Products</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li><a href="blog.html">Blog</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-column">
+        <h3>Customer Service</h3>
+        <ul>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="shipping.html">Shipping & Returns</a></li>
+          <li><a href="warranty.html">Warranty</a></li>
+          <li><a href="terms.html">Terms & Conditions</a></li>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-column">
+        <h3>Contact Info</h3>
+        <p><i class="fas fa-map-marker-alt"></i> 123 Plumbing Street, City, Country</p>
+        <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+        <p><i class="fas fa-envelope"></i> info@plumbpro.com</p>
+        <p><i class="fas fa-clock"></i> Mon-Fri: 8AM - 6PM</p>
+      </div>
+    </div>
+    
+    <div class="copyright">
+      <p>© 2025 PlumbPro | All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('signupForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      
+      // Validate passwords match
+      if (password !== confirmPassword) {
+        alert("Passwords do not match!");
+        return;
+      }
+      
+      // Validate password strength
+      if (calculatePasswordStrength(password) < 3) {
+        alert("Please choose a stronger password. Use a mix of letters, numbers, and special characters.");
+        return;
+      }
+      
+      // Save user data (in a real app, this would be sent to a server)
+      const userData = {
+        name: name,
+        email: email,
+        password: password
+      };
+      
+      localStorage.setItem('plumbproUser', JSON.stringify(userData));
+      
+      // Show success modal
+      document.getElementById('successModal').style.display = 'flex';
+    });
+    
+    // Password strength calculator
+    function calculatePasswordStrength(password) {
+      let strength = 0;
+      
+      if (password.length >= 8) strength++;
+      if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength++;
+      if (password.match(/\d/)) strength++;
+      if (password.match(/[^a-zA-Z\d]/)) strength++;
+      
+      return strength;
+    }
+    
+    // Update password strength indicator
+    document.getElementById('password').addEventListener('input', function() {
+      const password = this.value;
+      const strength = calculatePasswordStrength(password);
+      const strengthBar = document.getElementById('passwordStrengthBar');
+      const strengthText = document.getElementById('passwordStrengthText');
+      
+      // Update strength bar
+      if (strength === 0) {
+        strengthBar.style.width = '0%';
+        strengthBar.style.backgroundColor = '#dc3545';
+        strengthText.textContent = 'Very weak';
+      } else if (strength === 1) {
+        strengthBar.style.width = '25%';
+        strengthBar.style.backgroundColor = '#dc3545';
+        strengthText.textContent = 'Weak';
+      } else if (strength === 2) {
+        strengthBar.style.width = '50%';
+        strengthBar.style.backgroundColor = '#ffc107';
+        strengthText.textContent = 'Medium';
+      } else if (strength === 3) {
+        strengthBar.style.width = '75%';
+        strengthBar.style.backgroundColor = '#28a745';
+        strengthText.textContent = 'Strong';
+      } else {
+        strengthBar.style.width = '100%';
+        strengthBar.style.backgroundColor = '#28a745';
+        strengthText.textContent = 'Very strong';
+      }
+    });
+    
+    // Check password confirmation
+    document.getElementById('confirmPassword').addEventListener('input', function() {
+      const password = document.getElementById('password').value;
+      const confirmPassword = this.value;
+      const matchText = document.getElementById('passwordMatchText');
+      
+      if (confirmPassword === '') {
+        matchText.textContent = '';
+      } else if (password === confirmPassword) {
+        matchText.textContent = 'Passwords match';
+        matchText.style.color = '#28a745';
+      } else {
+        matchText.textContent = 'Passwords do not match';
+        matchText.style.color = '#dc3545';
+      }
+    });
+    
+    // Modal functionality
+    document.getElementById('modalLoginBtn').addEventListener('click', function() {
+      window.location.href = 'login.html';
+    });
+    
+    // Social signup buttons
+    document.querySelectorAll('.social-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const platform = this.classList.contains('google') ? 'Google' : 'Facebook';
+        alert(`Redirecting to ${platform} sign up...`);
+      });
+    });
+  </script>
+</body>
+</html>

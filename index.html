@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PlumbPro - Home</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* ===== Global Styles ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background-color: #f8f9fa;
+      color: #333;
+      line-height: 1.6;
+    }
+    
+    /* ===== Header & Nav Styles ===== */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background: #0077b6;
+      color: #fff;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .logo h1 { 
+      margin: 0; 
+      font-size: 1.8rem; 
+      display: flex;
+      align-items: center;
+    }
+    
+    .logo h1 i {
+      margin-right: 10px;
+      color: #ffcc00;
+    }
+    
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+    }
+    
+    nav ul li { 
+      position: relative; 
+      margin: 0 5px;
+    }
+    
+    nav ul li a {
+      color: #fff;
+      text-decoration: none;
+      padding: 8px 15px;
+      display: block;
+      font-weight: 500;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+    
+    nav ul li a:hover { 
+      background: rgba(255,255,255,0.2); 
+    }
+    
+    /* Mobile menu button */
+    .menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    /* Dropdown */
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      background: #fff;
+      min-width: 180px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      border-radius: 6px;
+      top: 100%;
+      left: 0;
+      z-index: 100;
+      overflow: hidden;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    .dropdown-menu li a {
+      color: #333;
+      padding: 12px 15px;
+      transition: all 0.2s ease;
+    }
+    
+    .dropdown-menu li a:hover {
+      background: #f0f0f0;
+      padding-left: 20px;
+    }
+    
+    .dropdown:hover .dropdown-menu,
+    .profile:hover .dropdown-menu {
+      display: block;
+    }
+
+    /* Profile */
+    .profile-icon {
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      vertical-align: middle;
+      margin-right: 5px;
+      object-fit: cover;
+    }
+
+    /* ===== Slider Styles ===== */
+    .slider-container {
+      position: relative;
+      width: 100%;
+      max-width: 1200px;
+      margin: 30px auto;
+      overflow: hidden;
+      border-radius: 12px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+    }
+    
+    .slider {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+    }
+    
+    .slide {
+      min-width: 100%;
+      position: relative;
+    }
+    
+    .slider img {
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+      display: block;
+    }
+    
+    .slide-content {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(transparent, rgba(0,0,0,0.8));
+      color: white;
+      padding: 20px;
+      text-align: left;
+    }
+    
+    .slide-content h3 {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+    }
+    
+    .slide-content p {
+      margin-bottom: 15px;
+      font-size: 1.1rem;
+    }
+    
+    .slide-btn {
+      display: inline-block;
+      padding: 8px 20px;
+      background: #ff6600;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    
+    .slide-btn:hover {
+      background: #ff8533;
+      transform: translateY(-2px);
+    }
+
+    /* Navigation Arrows */
+    .prev, .next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,0.5);
+      color: #fff;
+      padding: 12px 17px;
+      cursor: pointer;
+      border: none;
+      border-radius: 50%;
+      font-size: 24px;
+      z-index: 10;
+      transition: all 0.3s ease;
+    }
+    
+    .prev:hover, .next:hover {
+      background: rgba(0,0,0,0.8);
+    }
+    
+    .prev { left: 15px; }
+    .next { right: 15px; }
+
+    /* Dots */
+    .dots {
+      text-align: center;
+      position: absolute;
+      bottom: 15px;
+      width: 100%;
+    }
+    
+    .dot {
+      display: inline-block;
+      height: 12px;
+      width: 12px;
+      margin: 0 5px;
+      background: rgba(255,255,255,0.7);
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .dot:hover {
+      background: rgba(255,255,255,0.9);
+      transform: scale(1.2);
+    }
+    
+    .dot.active { 
+      background: #ff6600; 
+      transform: scale(1.2);
+    }
+
+    /* ===== Product Showcase ===== */
+    .products-section {
+      padding: 50px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .section-title {
+      text-align: center;
+      margin-bottom: 40px;
+      position: relative;
+      font-size: 2.2rem;
+      color: #0077b6;
+    }
+    
+    .section-title:after {
+      content: '';
+      display: block;
+      width: 80px;
+      height: 4px;
+      background: #ff6600;
+      margin: 15px auto;
+      border-radius: 2px;
+    }
+    
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 25px;
+    }
+    
+    .product-card {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
+    }
+    
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    }
+    
+    .product-img {
+      height: 200px;
+      overflow: hidden;
+    }
+    
+    .product-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    
+    .product-card:hover .product-img img {
+      transform: scale(1.05);
+    }
+    
+    .product-info {
+      padding: 20px;
+    }
+    
+    .product-info h3 {
+      margin-bottom: 10px;
+      color: #0077b6;
+    }
+    
+    .product-info p {
+      color: #666;
+      margin-bottom: 15px;
+      font-size: 0.95rem;
+    }
+    
+    .product-price {
+      font-weight: bold;
+      color: #ff6600;
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+      display: block;
+    }
+    
+    .add-to-cart {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background: #0077b6;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    
+    .add-to-cart:hover {
+      background: #0090d9;
+    }
+
+    /* ===== Features Section ===== */
+    .features {
+      background: #e6f4ff;
+      padding: 60px 20px;
+      text-align: center;
+    }
+    
+    .features-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+    }
+    
+    .feature {
+      padding: 25px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+    
+    .feature i {
+      font-size: 2.5rem;
+      color: #0077b6;
+      margin-bottom: 20px;
+    }
+    
+    .feature h3 {
+      margin-bottom: 15px;
+      color: #0077b6;
+    }
+
+    /* ===== Main Section ===== */
+    main { 
+      text-align: center; 
+      padding: 40px 20px; 
+      background: white;
+      margin: 30px auto;
+      max-width: 1200px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+    
+    main h2 { 
+      font-size: 2.2rem; 
+      margin-bottom: 20px;
+      color: #0077b6;
+    }
+    
+    main p { 
+      font-size: 1.1rem; 
+      margin-bottom: 25px;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 12px 30px;
+      background: #ff6600;
+      color: #fff;
+      border-radius: 5px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    
+    .btn:hover {
+      background: #ff8533;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255,102,0,0.3);
+    }
+
+    /* ===== Footer ===== */
+    footer {
+      background: #004b70;
+      color: #fff;
+      padding: 50px 0 20px;
+      margin-top: 60px;
+    }
+    
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    .footer-column h3 {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+      position: relative;
+      padding-bottom: 10px;
+    }
+    
+    .footer-column h3:after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 40px;
+      height: 3px;
+      background: #ff6600;
+    }
+    
+    .footer-column p, .footer-column li {
+      margin-bottom: 10px;
+      opacity: 0.9;
+    }
+    
+    .footer-column ul {
+      list-style: none;
+    }
+    
+    .footer-column ul li {
+      margin-bottom: 8px;
+    }
+    
+    .footer-column a {
+      color: #fff;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    
+    .footer-column a:hover {
+      color: #ffcc00;
+      padding-left: 5px;
+    }
+    
+    .social-links {
+      display: flex;
+      gap: 15px;
+      margin-top: 15px;
+    }
+    
+    .social-links a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+      transition: all 0.3s ease;
+    }
+    
+    .social-links a:hover {
+      background: #ff6600;
+      transform: translateY(-3px);
+    }
+    
+    .copyright {
+      text-align: center;
+      padding-top: 30px;
+      margin-top: 30px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      opacity: 0.8;
+      font-size: 0.9rem;
+    }
+
+    /* ===== Animations ===== */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* ===== Responsive Styles ===== */
+    @media (max-width: 992px) {
+      .slider img { height: 350px; }
+      
+      .slide-content h3 {
+        font-size: 1.5rem;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      header {
+        flex-wrap: wrap;
+      }
+      
+      .menu-btn {
+        display: block;
+      }
+      
+      nav {
+        width: 100%;
+        margin-top: 15px;
+        display: none;
+      }
+      
+      nav.active {
+        display: block;
+      }
+      
+      nav ul {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      nav ul li {
+        width: 100%;
+        margin: 5px 0;
+      }
+      
+      .dropdown-menu {
+        position: static;
+        width: 100%;
+        box-shadow: none;
+        margin-top: 5px;
+        display: none;
+        animation: none;
+      }
+      
+      .dropdown:hover .dropdown-menu,
+      .profile:hover .dropdown-menu {
+        display: none;
+      }
+      
+      .dropdown.active .dropdown-menu,
+      .profile.active .dropdown-menu {
+        display: block;
+      }
+      
+      .slider img { 
+        height: 280px; 
+      }
+      
+      .slide-content {
+        padding: 15px;
+      }
+      
+      .slide-content h3 {
+        font-size: 1.3rem;
+      }
+      
+      .slide-content p {
+        font-size: 1rem;
+        display: none;
+      }
+      
+      .prev, .next { 
+        font-size: 20px; 
+        padding: 10px 14px; 
+      }
+      
+      .dot { 
+        height: 10px; 
+        width: 10px; 
+      }
+      
+      .section-title {
+        font-size: 1.8rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .slider img { 
+        height: 220px; 
+      }
+      
+      .slide-content h3 {
+        font-size: 1.1rem;
+      }
+      
+      .prev, .next { 
+        font-size: 16px; 
+        padding: 8px 12px; 
+      }
+      
+      .dot { 
+        height: 8px; 
+        width: 8px; 
+      }
+      
+      .products-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      main h2 {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== Header with Categories + Profile + Cart ===== -->
+  <header>
+    <div class="logo">
+      <h1><i class="fas fa-faucet"></i> PlumbPro</h1>
+    </div>
+    
+    <button class="menu-btn" id="menu-toggle">
+      <i class="fas fa-bars"></i>
+    </button>
+    
+    <nav id="main-nav">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+
+        <!-- Categories Dropdown -->
+        <li class="dropdown">
+          <a href="#"><i class="fas fa-box-open"></i> Products ▾</a>
+          <ul class="dropdown-menu">
+            <li><a href="pipes.html"><i class="fas fa-pipe"></i> Pipes</a></li>
+            <li><a href="fittings.html"><i class="fas fa-link"></i> Fittings</a></li>
+            <li><a href="taps.html"><i class="fas fa-faucet"></i> Taps & Faucets</a></li>
+            <li><a href="bathroom.html"><i class="fas fa-bath"></i> Bathroom Accessories</a></li>
+          </ul>
+        </li>
+
+        
+        <li><a href="cart.html"><i class="fas fa-shopping-cart"></i> Cart <span id="cart-count">(0)</span></a></li>
+        <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact</a></li>
+
+        <!-- Profile Section -->
+        <li class="profile">
+          <a href="#">
+            <img src="images/Ani.jpg" alt="Profile" class="profile-icon">
+            Profile
+          </a>
+          <ul class="dropdown-menu">
+            <li><a href="login.html"><i class="fas fa-sign-in-alt"></i> Login / Sign Up</a></li>
+            <li><a href="profile.html"><i class="fas fa-user-circle"></i> My Account</a></li>
+            <li><a href="orders.html"><i class="fas fa-clipboard-list"></i> My Orders</a></li>
+            <li><a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ===== Slider Section ===== -->
+  <div class="slider-container">
+    <div class="slider">
+      <div class="slide">
+        <img src="images/product2.png" alt="Premium Pipes">
+        <div class="slide-content">
+          <h3>Premium Plumbing Solutions</h3>
+          <p>High-quality pipes and fittings for all your plumbing needs</p>
+          <a href="taps.html" class="slide-btn">Shop Now</a>
+        </div>
+      </div>
+      <div class="slide">
+        <img src="images/product1.png" alt="Bathroom Fixtures">
+        <div class="slide-content">
+          <h3>Elegant Bathroom Fixtures</h3>
+          <p>Transform your bathroom with our stylish and durable fixtures</p>
+          <a href="bathroom.html" class="slide-btn">Explore</a>
+        </div>
+      </div>
+      <div class="slide">
+        <img src="images/offer1.png" alt="Special Offers">
+        <div class="slide-content">
+          <h3>Special Discounts</h3>
+          <p>Check out our limited-time offers on premium plumbing products</p>
+          <a href="fittings.html?discount=true" class="slide-btn">View Offers</a>
+        </div>
+      </div>
+    </div>
+    <!-- Arrows -->
+    <button class="prev">&#10094;</button>
+    <button class="next">&#10095;</button>
+    <!-- Dots -->
+    <div class="dots"></div>
+  </div>
+
+  <!-- ===== Product Showcase ===== -->
+  <section class="products-section">
+    <h2 class="section-title">Featured Products</h2>
+    <div class="products-grid">
+      <div class="product-card">
+        <div class="product-img">
+          <img src="images/product1.png" alt="Copper Pipes">
+        </div>
+        <div class="product-info">
+          <h3>Copper Pipes</h3>
+          <p>High-quality copper pipes for all plumbing applications</p>
+          <span class="product-price">₹24.99</span>
+          <button class="add-to-cart">Add to Cart</button>
+        </div>
+      </div>
+      
+      <div class="product-card">
+        <div class="product-img">
+          <img src="images/product2.png" alt="Modern Faucet">
+        </div>
+        <div class="product-info">
+          <h3>Modern Faucet</h3>
+          <p>Elegant and efficient faucet with water-saving technology</p>
+          <span class="product-price">₹89.99</span>
+          <button class="add-to-cart">Add to Cart</button>
+        </div>
+      </div>
+      
+      <div class="product-card">
+        <div class="product-img">
+          <img src="images/product3.png" alt="PVC Fittings">
+        </div>
+        <div class="product-info">
+          <h3>PVC Fittings</h3>
+          <p>Durable PVC fittings for secure connections</p>
+          <span class="product-price">₹12.99</span>
+          <button class="add-to-cart">Add to Cart</button>
+        </div>
+      </div>
+      
+      <div class="product-card">
+        <div class="product-img">
+          <img src="images/product4.png" alt="Shower Set">
+        </div>
+        <div class="product-info">
+          <h3>Premium Shower Set</h3>
+          <p>Complete shower set with rainfall showerhead</p>
+          <span class="product-price">₹129.99</span>
+          <button class="add-to-cart">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Features Section ===== -->
+  <section class="features">
+    <div class="features-container">
+      <div class="feature">
+        <i class="fas fa-truck"></i>
+        <h3>Free Shipping</h3>
+        <p>Free delivery on orders over $100</p>
+      </div>
+      
+      <div class="feature">
+        <i class="fas fa-medal"></i>
+        <h3>Quality Guarantee</h3>
+        <p>All products come with warranty</p>
+      </div>
+      
+      <div class="feature">
+        <i class="fas fa-tools"></i>
+        <h3>Expert Support</h3>
+        <p>Get advice from plumbing experts</p>
+      </div>
+      
+      <div class="feature">
+        <i class="fas fa-undo"></i>
+        <h3>Easy Returns</h3>
+        <p>30-day money-back guarantee</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Main Section ===== -->
+  <main>
+    <h2>Welcome to PlumbPro</h2>
+    <p>Your one-stop shop for all plumbing materials. With over 15 years of experience, we provide high-quality plumbing solutions for both residential and commercial properties. Our products are sourced from trusted manufacturers and come with comprehensive warranties.</p>
+    <a href="taps.html" class="btn">Explore Our Products</a>
+  </main>
+
+  <!-- ===== Footer ===== -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-column">
+        <h3>PlumbPro</h3>
+        <p>Your trusted partner for all plumbing needs. We provide high-quality materials and expert advice to ensure your projects succeed.</p>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-pinterest"></i></a>
+        </div>
+      </div>
+      
+      <div class="footer-column">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="pipes.html">Products</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li><a href="blog.html">Blog</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-column">
+        <h3>Customer Service</h3>
+        <ul>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="shipping.html">Shipping & Returns</a></li>
+          <li><a href="warranty.html">Warranty</a></li>
+          <li><a href="terms.html">Terms & Conditions</a></li>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-column">
+        <h3>Contact Info</h3>
+        <p><i class="fas fa-map-marker-alt"></i> 123 Plumbing Street, City, Country</p>
+        <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+        <p><i class="fas fa-envelope"></i> info@plumbpro.com</p>
+        <p><i class="fas fa-clock"></i> Mon-Fri: 8AM - 6PM</p>
+      </div>
+    </div>
+    
+    <div class="copyright">
+      <p>© 2025 PlumbPro | All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // ===== Mobile Menu Toggle =====
+    const menuToggle = document.getElementById('menu-toggle');
+    const mainNav = document.getElementById('main-nav');
+    
+    menuToggle.addEventListener('click', () => {
+      mainNav.classList.toggle('active');
+    });
+    
+    // ===== Dropdown Menu for Mobile =====
+    const dropdowns = document.querySelectorAll('.dropdown, .profile');
+    
+    dropdowns.forEach(dropdown => {
+      const link = dropdown.querySelector('a');
+      
+      link.addEventListener('click', (e) => {
+        if (window.innerWidth <= 768) {
+          e.preventDefault();
+          dropdown.classList.toggle('active');
+        }
+      });
+    });
+    
+    // ===== Slider JS =====
+    let currentIndex = 0;
+    let autoSlideInterval;
+    const slider = document.querySelector(".slider");
+    const slides = document.querySelectorAll(".slide");
+    const dotsContainer = document.querySelector(".dots");
+
+    // Create dots dynamically
+    slides.forEach((_, i) => {
+      const dot = document.createElement("span");
+      dot.classList.add("dot");
+      if(i === 0) dot.classList.add("active");
+      dot.addEventListener("click", () => { 
+        clearInterval(autoSlideInterval);
+        showSlide(i);
+        startAutoSlide();
+      });
+      dotsContainer.appendChild(dot);
+    });
+    
+    const dots = document.querySelectorAll(".dot");
+
+    function showSlide(index) {
+      currentIndex = index;
+      slider.style.transform = `translateX(${-index * 100}%)`;
+      dots.forEach((dot, i) => dot.classList.toggle("active", i === index));
+    }
+
+    document.querySelector(".prev").addEventListener("click", () => {
+      clearInterval(autoSlideInterval);
+      let index = (currentIndex === 0) ? slides.length - 1 : currentIndex - 1;
+      showSlide(index);
+      startAutoSlide();
+    });
+    
+    document.querySelector(".next").addEventListener("click", () => {
+      clearInterval(autoSlideInterval);
+      let index = (currentIndex === slides.length - 1) ? 0 : currentIndex + 1;
+      showSlide(index);
+      startAutoSlide();
+    });
+    
+    // Pause auto slide on hover
+    const sliderContainer = document.querySelector('.slider-container');
+    
+    sliderContainer.addEventListener('mouseenter', () => {
+      clearInterval(autoSlideInterval);
+    });
+    
+    sliderContainer.addEventListener('mouseleave', () => {
+      startAutoSlide();
+    });
+
+    // Auto slide every 5s
+    function startAutoSlide() {
+      autoSlideInterval = setInterval(() => {
+        let index = (currentIndex === slides.length - 1) ? 0 : currentIndex + 1;
+        showSlide(index);
+      }, 5000);
+    }
+    
+    startAutoSlide();
+
+    // ===== Cart Counter =====
+    function updateCartCount() {
+      // Get cart from localStorage (assuming it's saved as an array of items)
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      document.getElementById("cart-count").textContent = `(${cart.length})`;
+    }
+
+    // Run on page load
+    updateCartCount();
+
+    // Optional: listen for storage updates (sync across tabs)
+    window.addEventListener("storage", updateCartCount);
+    
+    // ===== Add to Cart Buttons =====
+    const addToCartButtons = document.querySelectorAll('.add-to-cart');
+    
+    addToCartButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        // Get product info (in a real app, this would come from a data source)
+        const productCard = button.closest('.product-card');
+        const productName = productCard.querySelector('h3').textContent;
+        const productPrice = productCard.querySelector('.product-price').textContent;
+        
+        // Add to cart logic
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        cart.push({
+          name: productName,
+          price: productPrice,
+          image: productCard.querySelector('img').src
+        });
+        
+        localStorage.setItem("cart", JSON.stringify(cart));
+        updateCartCount();
+        
+        // Show feedback
+        button.textContent = 'Added to Cart!';
+        setTimeout(() => {
+          button.textContent = 'Add to Cart';
+        }, 1500);
+      });
+    });
+  </script>
+  
+  <script src="js/auth.js"></script>
+</body>
+</html>

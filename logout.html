@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PlumbPro - Logout</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background-color: #f8f9fa;
+      color: #333;
+      line-height: 1.6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    
+    .logout-container {
+      max-width: 500px;
+      width: 100%;
+      background-color: #fff;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    
+    .logo {
+      margin-bottom: 30px;
+    }
+    
+    .logo h1 {
+      font-size: 2.2rem;
+      color: #0077b6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .logo i {
+      margin-right: 10px;
+      color: #ffcc00;
+    }
+    
+    .logout-icon {
+      font-size: 4rem;
+      color: #dc3545;
+      margin-bottom: 20px;
+    }
+    
+    .logout-title {
+      color: #0077b6;
+      margin-bottom: 15px;
+      font-size: 1.8rem;
+    }
+    
+    .logout-message {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 1.1rem;
+    }
+    
+    .logout-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 25px;
+    }
+    
+    .btn {
+      padding: 12px 25px;
+      border-radius: 5px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+      font-size: 1rem;
+    }
+    
+    .btn-logout {
+      background: #dc3545;
+      color: white;
+    }
+    
+    .btn-logout:hover {
+      background: #bd2130;
+    }
+    
+    .btn-cancel {
+      background: #6c757d;
+      color: white;
+    }
+    
+    .btn-cancel:hover {
+      background: #5a6268;
+    }
+    
+    .user-info {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 20px 0;
+      text-align: left;
+    }
+    
+    .user-info p {
+      margin: 8px 0;
+      display: flex;
+      align-items: center;
+    }
+    
+    .user-info i {
+      margin-right: 10px;
+      color: #0077b6;
+      width: 20px;
+    }
+    
+    .footer {
+      margin-top: 30px;
+      color: #666;
+      font-size: 0.9rem;
+    }
+    
+    @media (max-width: 768px) {
+      .logout-container {
+        padding: 30px 20px;
+      }
+      
+      .logout-buttons {
+        flex-direction: column;
+      }
+      
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="logout-container">
+    <div class="logo">
+      <h1><i class="fas fa-faucet"></i> PlumbPro</h1>
+    </div>
+    
+    <div class="logout-icon">
+      <i class="fas fa-sign-out-alt"></i>
+    </div>
+    
+    <h2 class="logout-title">Ready to leave?</h2>
+    
+    <p class="logout-message">Are you sure you want to sign out of your PlumbPro account?</p>
+    
+    <div class="user-info">
+      <p><i class="fas fa-user"></i> <strong>John Doe</strong></p>
+      <p><i class="fas fa-envelope"></i> johndoe@example.com</p>
+      <p><i class="fas fa-clock"></i> Last login: Today at 2:30 PM</p>
+    </div>
+    
+    <div class="logout-buttons">
+      <button class="btn btn-cancel" onclick="cancelLogout()">Cancel</button>
+      <button class="btn btn-logout" onclick="confirmLogout()">Yes, Logout</button>
+    </div>
+    
+    <div class="footer">
+      <p>© 2025 PlumbPro | All rights reserved</p>
+    </div>
+  </div>
+
+  <script>
+    // Get user data from localStorage (in a real app, this would come from your authentication system)
+    function getUserData() {
+      return {
+        name: 'John Doe',
+        email: 'johndoe@example.com',
+        lastLogin: 'Today at 2:30 PM'
+      };
+    }
+    
+    // Simulate logout process
+    function confirmLogout() {
+      // Show loading state
+      const logoutBtn = document.querySelector('.btn-logout');
+      const originalText = logoutBtn.innerHTML;
+      logoutBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging out...';
+      logoutBtn.disabled = true;
+      
+      // Simulate API call to logout
+      setTimeout(() => {
+        // Clear user data from storage
+        localStorage.removeItem('plumbproUser');
+        sessionStorage.removeItem('plumbproUser');
+        
+        // Redirect to login page
+        window.location.href = 'login.html';
+      }, 1500);
+    }
+    
+    // Cancel logout and go back
+    function cancelLogout() {
+      window.history.back();
+    }
+    
+    // Populate user data on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      const userData = getUserData();
+      
+      // If no user is logged in, redirect to login page
+      if (!userData) {
+        window.location.href = 'login.html';
+        return;
+      }
+      
+      // Update user info in the UI
+      document.querySelector('.user-info strong').textContent = userData.name;
+      document.querySelector('.user-info p:nth-child(2)').innerHTML = 
+        '<i class="fas fa-envelope"></i> ' + userData.email;
+      document.querySelector('.user-info p:nth-child(3)').innerHTML = 
+        '<i class="fas fa-clock"></i> Last login: ' + userData.lastLogin;
+    });
+    
+    // Handle keyboard events
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        cancelLogout();
+      } else if (e.key === 'Enter') {
+        confirmLogout();
+      }
+    });
+  </script>
+</body>
+</html>

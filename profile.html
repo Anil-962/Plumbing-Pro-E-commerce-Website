@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile - PlumbPro</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background-color: #f8f9fa;
+      color: #333;
+      line-height: 1.6;
+    }
+    
+    /* Header Styles */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
+      background: #0077b6;
+      color: #fff;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .logo h1 { 
+      margin: 0; 
+      font-size: 1.8rem; 
+      display: flex;
+      align-items: center;
+    }
+    
+    .logo h1 i {
+      margin-right: 10px;
+      color: #ffcc00;
+    }
+    
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+    }
+    
+    nav ul li { 
+      position: relative; 
+      margin: 0 5px;
+    }
+    
+    nav ul li a {
+      color: #fff;
+      text-decoration: none;
+      padding: 8px 15px;
+      display: block;
+      font-weight: 500;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+    
+    nav ul li a:hover { 
+      background: rgba(255,255,255,0.2); 
+    }
+    
+    nav ul li a.active {
+      background: rgba(255,255,255,0.2);
+    }
+    
+    /* Profile Container */
+    .profile-container {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+    
+    .profile-content {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 30px;
+    }
+    
+    @media (max-width: 768px) {
+      .profile-content {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    /* Profile Sidebar */
+    .profile-sidebar {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      padding: 25px;
+      text-align: center;
+    }
+    
+    .profile-img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin: 0 auto 20px;
+      border: 4px solid #0077b6;
+    }
+    
+    .profile-name {
+      color: #0077b6;
+      margin-bottom: 5px;
+    }
+    
+    .profile-email {
+      color: #666;
+      margin-bottom: 20px;
+    }
+    
+    .profile-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin: 25px 0;
+    }
+    
+    .stat-item {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #0077b6;
+    }
+    
+    .stat-label {
+      font-size: 0.9rem;
+      color: #666;
+    }
+    
+    .sidebar-actions {
+      margin-top: 25px;
+    }
+    
+    .sidebar-btn {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: none;
+      background: #f8f9fa;
+      color: #333;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+      text-decoration: none;
+    }
+    
+    .sidebar-btn:hover {
+      background: #0077b6;
+      color: #fff;
+    }
+    
+    .sidebar-btn.logout {
+      background: #dc3545;
+      color: #fff;
+    }
+    
+    .sidebar-btn.logout:hover {
+      background: #bd2130;
+    }
+    
+    /* Profile Main Content */
+    .profile-main {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+    
+    .profile-card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      padding: 25px;
+    }
+    
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+    
+    .card-title {
+      color: #0077b6;
+      font-size: 1.3rem;
+    }
+    
+    .card-action {
+      color: #0077b6;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    
+    .card-action:hover {
+      text-decoration: underline;
+    }
+    
+    /* Info Grid */
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+    
+    .info-item {
+      margin-bottom: 15px;
+    }
+    
+    .info-label {
+      font-weight: 500;
+      color: #0077b6;
+      margin-bottom: 5px;
+    }
+    
+    .info-value {
+      color: #333;
+    }
+    
+    /* Orders List */
+    .orders-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    .order-item {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 15px;
+      padding: 15px;
+      border-radius: 8px;
+      background: #f8f9fa;
+      align-items: center;
+    }
+    
+    .order-img {
+      width: 60px;
+      height: 60px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+    
+    .order-details h4 {
+      color: #0077b6;
+      margin-bottom: 5px;
+    }
+    
+    .order-details p {
+      color: #666;
+      font-size: 0.9rem;
+    }
+    
+    .order-price {
+      font-weight: 600;
+      color: #ff6600;
+    }
+    
+    /* Footer */
+    footer {
+      background: #004b70;
+      color: #fff;
+      padding: 50px 0 20px;
+      margin-top: 60px;
+    }
+    
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    .footer-column h3 {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+      position: relative;
+      padding-bottom: 10px;
+    }
+    
+    .footer-column h3:after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 40px;
+      height: 3px;
+      background: #ff6600;
+    }
+    
+    .footer-column p, .footer-column li {
+      margin-bottom: 10px;
+      opacity: 0.9;
+    }
+    
+    .footer-column ul {
+      list-style: none;
+    }
+    
+    .footer-column ul li {
+      margin-bottom: 8px;
+    }
+    
+    .footer-column a {
+      color: #fff;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    
+    .footer-column a:hover {
+      color: #ffcc00;
+      padding-left: 5px;
+    }
+    
+    .social-links {
+      display: flex;
+      gap: 15px;
+      margin-top: 15px;
+    }
+    
+    .social-links a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+      transition: all 0.3s ease;
+    }
+    
+    .social-links a:hover {
+      background: #ff6600;
+      transform: translateY(-3px);
+    }
+    
+    .copyright {
+      text-align: center;
+      padding-top: 30px;
+      margin-top: 30px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      opacity: 0.8;
+      font-size: 0.9rem;
+    }
+    
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .modal-content {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+    
+    .modal-title {
+      color: #0077b6;
+      font-size: 1.5rem;
+    }
+    
+    .close-modal {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #666;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #0077b6;
+    }
+    
+    .form-group input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+    
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    
+    .btn {
+      padding: 10px 20px;
+      border-radius: 5px;
+      border: none;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    
+    .btn-primary {
+      background: #0077b6;
+      color: #fff;
+    }
+    
+    .btn-secondary {
+      background: #6c757d;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="logo">
+      <h1><i class="fas fa-faucet"></i> PlumbPro</h1>
+    </div>
+    
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="cart.html">Cart</a></li>
+        <li><a href="orders.html">Orders</a></li>
+        <li><a href="profile.html" class="active">Profile</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Profile Content -->
+  <div class="profile-container">
+    <div class="profile-content">
+      <!-- Sidebar -->
+      <div class="profile-sidebar">
+        <img src="https://via.placeholder.com/150" alt="User Profile" class="profile-img">
+        <h2 class="profile-name">John Doe</h2>
+        <p class="profile-email">johndoe@email.com</p>
+        
+        <div class="profile-stats">
+          <div class="stat-item">
+            <div class="stat-value">12</div>
+            <div class="stat-label">Orders</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">5</div>
+            <div class="stat-label">Reviews</div>
+          </div>
+        </div>
+        
+        <div class="sidebar-actions">
+          <a href="#" class="sidebar-btn" onclick="openEditModal()">
+            <i class="fas fa-edit"></i> Edit Profile
+          </a>
+          <a href="#" class="sidebar-btn">
+            <i class="fas fa-lock"></i> Change Password
+          </a>
+          <a href="#" class="sidebar-btn">
+            <i class="fas fa-map-marker-alt"></i> Addresses
+          </a>
+          <a href="#" class="sidebar-btn logout" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </a>
+        </div>
+      </div>
+      
+      <!-- Main Content -->
+      <div class="profile-main">
+        <!-- Personal Info Card -->
+        <div class="profile-card">
+          <div class="card-header">
+            <h3 class="card-title">Personal Information</h3>
+            <a href="#" class="card-action" onclick="openEditModal()">Edit</a>
+          </div>
+          
+          <div class="info-grid">
+            <div class="info-item">
+              <div class="info-label">Full Name</div>
+              <div class="info-value">John Doe</div>
+            </div>
+            
+            <div class="info-item">
+              <div class="info-label">Email Address</div>
+              <div class="info-value">johndoe@email.com</div>
+            </div>
+            
+            <div class="info-item">
+              <div class="info-label">Phone Number</div>
+              <div class="info-value">+91 9876543210</div>
+            </div>
+            
+            <div class="info-item">
+              <div class="info-label">Member Since</div>
+              <div class="info-value">January 15, 2024</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Address Card -->
+        <div class="profile-card">
+          <div class="card-header">
+            <h3 class="card-title">Default Address</h3>
+            <a href="#" class="card-action">Manage</a>
+          </div>
+          
+          <div class="info-item">
+            <div class="info-label">Shipping Address</div>
+            <div class="info-value">
+              123 Main Street, Bengaluru, Karnataka 560001, India
+            </div>
+          </div>
+        </div>
+        
+        <!-- Recent Orders Card -->
+        <div class="profile-card">
+          <div class="card-header">
+            <h3 class="card-title">Recent Orders</h3>
+            <a href="orders.html" class="card-action">View All</a>
+          </div>
+          
+          <div class="orders-list">
+            <div class="order-item">
+              <img src="https://via.placeholder.com/60" alt="Product" class="order-img">
+              <div class="order-details">
+                <h4>PVC Pipe - 2 inch</h4>
+                <p>Order #1001 • Delivered on Jan 20, 2024</p>
+              </div>
+              <div class="order-price">₹500</div>
+            </div>
+            
+            <div class="order-item">
+              <img src="https://via.placeholder.com/60" alt="Product" class="order-img">
+              <div class="order-details">
+                <h4>Bathroom Tap</h4>
+                <p>Order #1002 • Delivered on Jan 18, 2024</p>
+              </div>
+              <div class="order-price">₹1,200</div>
+            </div>
+            
+            <div class="order-item">
+              <img src="https://via.placeholder.com/60" alt="Product" class="order-img">
+              <div class="order-details">
+                <h4>Kitchen Sink</h4>
+                <p>Order #1003 • Delivered on Jan 15, 2024</p>
+              </div>
+              <div class="order-price">₹3,000</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Profile Modal -->
+  <div id="editModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Edit Profile</h3>
+        <button class="close-modal" onclick="closeEditModal()">&times;</button>
+      </div>
+      
+      <form id="editForm">
+        <div class="form-group">
+          <label for="editName">Full Name</label>
+          <input type="text" id="editName" value="John Doe">
+        </div>
+        
+        <div class="form-group">
+          <label for="editEmail">Email Address</label>
+          <input type="email" id="editEmail" value="johndoe@email.com">
+        </div>
+        
+        <div class="form-group">
+          <label for="editPhone">Phone Number</label>
+          <input type="tel" id="editPhone" value="+91 9876543210">
+        </div>
+        
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" onclick="closeEditModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-column">
+        <h3>PlumbPro</h3>
+        <p>Your trusted partner for all plumbing needs. We provide high-quality materials and expert advice to ensure your projects succeed.</p>
+        <div class="social-links">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-pinterest"></i></a>
+        </div>
+      </div>
+      
+      <div class="footer-column">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="products.html">Products</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li><a href="blog.html">Blog</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-column">
+        <h3>Customer Service</h3>
+        <ul>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="shipping.html">Shipping & Returns</a></li>
+          <li><a href="warranty.html">Warranty</a></li>
+          <li><a href="terms.html">Terms & Conditions</a></li>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-column">
+        <h3>Contact Info</h3>
+        <p><i class="fas fa-map-marker-alt"></i> 123 Plumbing Street, City, Country</p>
+        <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+        <p><i class="fas fa-envelope"></i> info@plumbpro.com</p>
+        <p><i class="fas fa-clock"></i> Mon-Fri: 8AM - 6PM</p>
+      </div>
+    </div>
+    
+    <div class="copyright">
+      <p>© 2025 PlumbPro | All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Logout function
+    function logout() {
+      if (confirm("Are you sure you want to logout?")) {
+        alert("You have been logged out successfully!");
+        window.location.href = "index.html";
+      }
+    }
+    
+    // Modal functions
+    function openEditModal() {
+      document.getElementById('editModal').style.display = 'flex';
+    }
+    
+    function closeEditModal() {
+      document.getElementById('editModal').style.display = 'none';
+    }
+    
+    // Close modal when clicking outside
+    window.addEventListener('click', function(event) {
+      const modal = document.getElementById('editModal');
+      if (event.target === modal) {
+        closeEditModal();
+      }
+    });
+    
+    // Handle form submission
+    document.getElementById('editForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      // In a real application, you would save the data to a server
+      alert("Profile updated successfully!");
+      closeEditModal();
+    });
+  </script>
+</body>
+</html>
